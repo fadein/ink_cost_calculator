@@ -11,12 +11,16 @@
 			   volume unit
 			   price)
 
-(define (ink-price-printer ink)
-  (let ((norm-volume (if (equal? (bottle-unit ink) 'ml)
-					   (bottle-volume ink)
-					   (oz->mL (bottle-volume ink)))))
+(define (ink-price-printer ink #!optional (output-unit 'mL))
+  (let ((norm-volume (cond
+					   ((equal? (bottle-unit ink) output-unit)
+						(bottle-volume ink))
+					   ((equal? output-unit 'mL)
+						(oz->mL (bottle-volume ink)))
+					   (else
+						 (mL->oz (bottle-volume ink))))))
 
-	(fmt #t (bottle-brand ink) " is $" (fix 3 (/ (bottle-price ink) norm-volume)) " per mL" nl)))
+	(fmt #t (bottle-brand ink) " is $" (fix 3 (/ (bottle-price ink) norm-volume)) " per " output-unit nl)))
 
 
 (define noodlers (make-bottle
@@ -26,26 +30,27 @@
 
 (define diamine (make-bottle
 				  "Diamine"
-				  80 'ml
+				  80 'mL
 				  14.95))
 
 (define montblanc (make-bottle
 					"Montblanc"
-					60 'ml
+					60 'mL
 					19.00))
 
 (define edelstein (make-bottle
 					"Pelikan Edelstein"
-					50 'ml
+					50 'mL
 					28.00))
 
 (define edelstein-sale (make-bottle
 					"Pelikan Edelstein (on sale)"
-					50 'ml
+					50 'mL
 					(* .85 25.20)))
 
-(ink-price-printer noodlers)
-(ink-price-printer diamine)
-(ink-price-printer montblanc)
-(ink-price-printer edelstein)
-(ink-price-printer edelstein-sale)
+(let ((unit 'mL))
+  (ink-price-printer noodlers unit)
+  (ink-price-printer diamine unit)
+  (ink-price-printer montblanc unit)
+  (ink-price-printer edelstein unit)
+  (ink-price-printer edelstein-sale unit))
