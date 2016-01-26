@@ -2,15 +2,22 @@
 
 (use fmt)
 
-(define *mL-per-oz* 29.5735295625) 
-(define (oz->mL oz) (* oz *mL-per-oz*))
-(define (mL->oz mL) (* mL (/ *mL-per-oz*)))
+;; utility functions to convert milliliters to ounces and vice-versa
+(define oz->mL #f)
+(define mL->oz #f)
+(let ((mL-per-oz 29.5735295625))
+  (set! oz->mL (lambda (oz) (* oz mL-per-oz)))
+  (set! mL->oz (lambda (mL) (* mL (/ mL-per-oz)))))
 
+;; Record type (aka struct) for a bottle of liquid
 (define-record bottle
-			   brand
-			   volume unit
-			   price)
+			   brand            ;; String
+			   volume unit      ;; Number and a symbol, either mL or oz
+			   price)           ;; Number
 
+;; Express a bottle's volume in the user's preferred units, regardless
+;; of how the volume is stored.  I suppose I could have normalized the volume
+;; through a setter function at the time of the record's creation...
 (define (normalize-volume ink output-unit)
   (cond
 	((equal? (bottle-unit ink) output-unit)
@@ -20,30 +27,44 @@
 	(else
 	  (mL->oz (bottle-volume ink)))))
 
+;; A generic comparator - the user supplies the relation
+(define (compare-per-vol left right rel)
+  (rel (/ (bottle-price left) (normalize-volume left 'mL))
+	 (/ (bottle-price right) (normalize-volume right 'mL))))
+
+;; comparator Curried with less-than relation
+(define (cheapest-per-vol left right)
+  (compare-per-vol left right <))
+
+;; comparator Curried with greater-than relation
+(define (most-expensive-per-vol left right)
+  (compare-per-vol left right >))
+
+;; Compute the cost of the bottle per unit volume
+;; Defaults to milliliters
 (define (price-per ink #!optional (output-unit 'mL))
   (/ (bottle-price ink) (normalize-volume ink output-unit)))
 
+;; Given a bottle, print it's name and its price-per-unit-volume
+;; Defaults to milliliters
 (define (ink-price-printer ink #!optional (output-unit 'mL))
   (fmt #t (bottle-brand ink) " is $"
 	   (fix 2 (/ (bottle-price ink) (normalize-volume ink output-unit)))
 	   " per " output-unit nl))
 
 
-(define (compare-per-vol left right rel)
-  (rel (/ (bottle-price left) (normalize-volume left 'mL))
-	 (/ (bottle-price right) (normalize-volume right 'mL))))
 
-(define (cheapest-per-vol left right)
-  (compare-per-vol left right <))
-
-(define (most-expensive-per-vol left right)
-  (compare-per-vol left right >))
-
-
-(let ((unit 'mL))
+;; Now that we have the utilities out of the way, let's run some data through it
+(let ((unit 'mL)
+	  (sorted-by most-expensive-per-vol))
   (for-each (lambda (ink) (ink-price-printer ink unit))
 			(sort
 			  (list
+
+				(make-bottle
+				  "Noodler's 4.5 oz"
+				  4.5 'oz
+				  21.00)
 
 				(make-bottle
 				  "Noodler's"
@@ -80,11 +101,6 @@
 				  "Pelikan Edelstein"
 				  50 'mL
 				  24.00)
-
-				#;(make-bottle
-				  "Pelikan Edelstein (on sale)"
-				  50 'mL
-				  (* .85 25.20))
 
 				(make-bottle
 				  "Pelikan 4001"
@@ -207,5 +223,5 @@
 				  11.00)
 				)
 
-			  most-expensive-per-vol
+			  sorted-by
 			  )))
