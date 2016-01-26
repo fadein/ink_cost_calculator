@@ -11,16 +11,22 @@
 			   volume unit
 			   price)
 
-(define (ink-price-printer ink #!optional (output-unit 'mL))
-  (let ((norm-volume (cond
-					   ((equal? (bottle-unit ink) output-unit)
-						(bottle-volume ink))
-					   ((equal? output-unit 'mL)
-						(oz->mL (bottle-volume ink)))
-					   (else
-						 (mL->oz (bottle-volume ink))))))
+(define (normalize-volume ink output-unit)
+  (cond
+	((equal? (bottle-unit ink) output-unit)
+	 (bottle-volume ink))
+	((equal? output-unit 'mL)
+	 (oz->mL (bottle-volume ink)))
+	(else
+	  (mL->oz (bottle-volume ink)))))
 
-	(fmt #t (bottle-brand ink) " is $" (fix 3 (/ (bottle-price ink) norm-volume)) " per " output-unit nl)))
+(define (price-per ink #!optional (output-unit 'mL))
+  (/ (bottle-price ink) (normalize-volume ink output-unit)))
+
+(define (ink-price-printer ink #!optional (output-unit 'mL))
+  (fmt #t (bottle-brand ink) " is $"
+	   (fix 3 (/ (bottle-price ink) (normalize-volume ink output-unit)))
+	   " per " output-unit nl))
 
 (let ((unit 'mL))
   (for-each (lambda (ink) (ink-price-printer ink unit))
