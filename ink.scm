@@ -48,9 +48,15 @@
 					50 'mL
 					(* .85 25.20)))
 
+(define deatrimentis (make-bottle
+					   "De Atramentis"
+					   35 'mL
+					   12.95))
+
 (let ((unit 'mL))
   (ink-price-printer noodlers unit)
   (ink-price-printer diamine unit)
   (ink-price-printer montblanc unit)
   (ink-price-printer edelstein unit)
-  (ink-price-printer edelstein-sale unit))
+  (ink-price-printer edelstein-sale unit)
+  (ink-price-printer deatrimentis unit))
