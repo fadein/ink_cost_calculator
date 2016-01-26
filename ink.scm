@@ -22,41 +22,171 @@
 
 	(fmt #t (bottle-brand ink) " is $" (fix 3 (/ (bottle-price ink) norm-volume)) " per " output-unit nl)))
 
-
-(define noodlers (make-bottle
-				   "Noodler's"
-				   3 'oz
-				   12.50))
-
-(define diamine (make-bottle
-				  "Diamine"
-				  80 'mL
-				  14.95))
-
-(define montblanc (make-bottle
-					"Montblanc"
-					60 'mL
-					19.00))
-
-(define edelstein (make-bottle
-					"Pelikan Edelstein"
-					50 'mL
-					28.00))
-
-(define edelstein-sale (make-bottle
-					"Pelikan Edelstein (on sale)"
-					50 'mL
-					(* .85 25.20)))
-
-(define deatrimentis (make-bottle
-					   "De Atramentis"
-					   35 'mL
-					   12.95))
-
 (let ((unit 'mL))
-  (ink-price-printer noodlers unit)
-  (ink-price-printer diamine unit)
-  (ink-price-printer montblanc unit)
-  (ink-price-printer edelstein unit)
-  (ink-price-printer edelstein-sale unit)
-  (ink-price-printer deatrimentis unit))
+  (for-each (lambda (ink) (ink-price-printer ink unit))
+			(list
+
+			  (make-bottle
+				"Noodler's"
+				3 'oz
+				12.50)
+
+			  (make-bottle
+				"Noodler's 1 oz"
+				1 'oz
+				13.50)
+
+			  (make-bottle
+				"Diamine Registrars"
+				30 'mL
+				16.95)
+
+			  (make-bottle
+				"Diamine Registrars 100mL"
+				100 'mL
+				33.95)
+
+
+			  (make-bottle
+				"Diamine"
+				80 'mL
+				14.95)
+
+			  (make-bottle
+				"Montblanc"
+				60 'mL
+				19.00)
+
+			  (make-bottle
+				"Pelikan Edelstein"
+				50 'mL
+				28.00)
+
+			  (make-bottle
+				"Pelikan Edelstein (on sale)"
+				50 'mL
+				(* .85 25.20))
+
+			  (make-bottle
+				"Pelikan 4001"
+				2 'oz
+				13.00)
+
+			  (make-bottle
+				"Platinum Mix-Free"
+				60 'mL
+				20.00)
+
+			  (make-bottle
+				"Rohrer & Klingner"
+				50 'mL
+				11.95)
+
+			  (make-bottle
+				"Shaeffer"
+				50 'mL
+				9.00)
+
+			  (make-bottle
+				"Stipula"
+				70 'mL
+				25.00)
+
+			  (make-bottle
+				"Visconti"
+				40 'mL
+				17.50)
+
+			  (make-bottle
+				"Waterman"
+				50 'mL
+				12.00)
+
+			  (make-bottle
+				"LAMY"
+				50 'mL
+				10.50)
+
+			  (make-bottle
+				"Montegrappa"
+				42 'mL
+				20.00)
+
+			  (make-bottle
+				"Monteverde"
+				90 'mL
+				12.50)
+
+			  (make-bottle
+				"Parker Quink"
+				2 'oz
+				12.00)
+
+			  (make-bottle
+				"De Atramentis"
+				35 'mL
+				12.95)
+
+			  (make-bottle
+				"De Atramentis Document Ink"
+				35 'mL
+				19.95)
+
+			  (make-bottle
+				"Caran D'Ache"
+				50 'mL
+				33.20)
+
+			  (make-bottle
+				"J. Herbin 30mL"
+				30 'mL
+				11.00)
+
+			  (make-bottle
+				"J. Herbin 50mL"
+				50 'mL
+				26.00)
+
+			  (make-bottle
+				"J. Herbin 100mL"
+				100 'mL
+				22.00)
+
+			  (make-bottle
+				"Omas"
+				62 'mL
+				15.50)
+
+			  (make-bottle
+				"Faber-Castell"
+				75 'mL
+				30.00)
+
+			  (make-bottle
+				"Kaweco"
+				30 'mL
+				14.00)
+
+			  (make-bottle
+				"Pilot Namiki"
+				60 'mL
+				12.00)
+
+			  (make-bottle
+				"Pilot Iroshizuku"
+				50 'mL
+				28.00)
+
+			  (make-bottle
+				"Aurora"
+				45 'mL
+				18.00)
+
+			  (make-bottle
+				"Private Reserve"
+				66 'mL
+				11.00)
+
+
+
+			  )))
