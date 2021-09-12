@@ -221,6 +221,12 @@
 				  "Private Reserve"
 				  66 'mL
 				  11.00)
+
+				(make-bottle
+				  "Robert Oster"
+				  50 'mL
+				  16.00)
+
 				)
 
 			  sorted-by
