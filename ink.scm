@@ -4,6 +4,31 @@
   fmt
   (chicken sort))
 
+(define (help)
+(print #<<USAGE
+
+This message can be repeated with `(help)`
+
+Unit conversions:
+  `oz->mL`
+  `mL->oz`
+
+Inks are represented as `bottle` records, with accessors:
+  `bottle-brand`
+  `bottle-volume`
+  `bottle-unit`
+  `bottle-price`
+
+The inks I know about are in the list `inks`
+`sort-inks` will render this list readable, sorted along various lines, such as
+  `cheapest-per-vol`
+  `most-expensive-per-vol`
+
+
+USAGE
+))
+(help)
+
 ;; utility functions to convert milliliters to ounces and vice-versa
 (define oz->mL #f)
 (define mL->oz #f)
@@ -283,28 +308,62 @@
       24.00)
     ))
 
-(define (help)
-(print #<<USAGE
 
-This message can be repeated with `(help)`
+(define sailor
+  (list
+    (make-bottle
+      "Sailor Ink Studio 767 - Goulet"
+      20 'mL
+      18.00)
 
-Unit conversions:
-  `oz->mL`
-  `mL->oz`
+    (make-bottle
+      "Sailor Manyo Ukikusa - Goulet"
+      50 'mL
+      24.00)
 
-Inks are represented as `bottle` records, with accessors:
-  `bottle-brand`
-  `bottle-volume`
-  `bottle-unit`
-  `bottle-price`
+    (make-bottle
+      "Sailor Ink Studio 224 - eBay"
+      0.7 'oz
+      16.26)
 
-The inks I know about are in the list `inks`
-`sort-inks` will render this list readable, sorted along various lines, such as
-  `cheapest-per-vol`
-  `most-expensive-per-vol`
+    ))
+
+(define green
+  (list
+    (make-bottle
+      "Pelikan Edelstein Olivine"
+      50 'mL
+      28)
+
+    (make-bottle
+      "Rohrer & Klingner Alt-Goldgrun"
+      50 'mL
+      11.95)
+
+    (make-bottle
+      "De Atramentis Edgar Allan Poe"
+      45 'mL
+      14)
+
+    (make-bottle
+      "Pilot Iroshizuku Shin-ryoku"
+      50 'mL
+      22.40)
+
+    (make-bottle
+      "Sailor Ink Studio 967"
+      20 'mL
+      18)
+
+    (make-bottle
+      "Sailor Waka-uguisu"
+      20 'mL
+      15)
+
+    (make-bottle
+      "Platinum Classic Forest Black"
+      60 'mL
+      30)
+    ))
 
 
-USAGE
-))
-
-(help)
