@@ -19,10 +19,15 @@ Inks are represented as `bottle` records, with accessors:
   `bottle-unit`
   `bottle-price`
 
-The inks I know about are in the list `inks`
-`sort-inks` will render this list readable, sorted along various lines, such as
+The inks I know about are in the lists `inks`, `sailor`, and `green`.
+
+`print-sorted-inks` will render these lists readable, sorted along various lines, such as
   `cheapest-per-vol`
   `most-expensive-per-vol`
+  `cheapest-per-bottle`
+  `most-expensive-per-bottle`
+  `smallest-bottle`
+  `largest-bottle`
 
 
 USAGE
@@ -83,6 +88,18 @@ USAGE
 (define (most-expensive-per-vol left right)
   (compare-per-vol left right >))
 
+(define (cheapest-per-bottle left right)
+  (< (bottle-price left) (bottle-price right)))
+
+(define (most-expensive-per-bottle left right)
+  (> (bottle-price left) (bottle-price right)))
+
+(define (smallest-bottle left right)
+  (< (normalize-volume left 'mL) (normalize-volume right 'mL)))
+
+(define (largest-bottle left right)
+  (> (normalize-volume left 'mL) (normalize-volume right 'mL)))
+
 ;; Compute the cost of the bottle per unit volume
 ;; Defaults to milliliters
 (define (price-per ink #!optional (output-unit 'mL))
@@ -94,7 +111,7 @@ USAGE
   (sort inks sorted-by))
 
 (define (print-sorted-inks inks #!key (sorted-by most-expensive-per-vol))
-  (for-each print (sorted-inks inks sorted-by)))
+  (for-each print (sorted-inks inks sorted-by: sorted-by)))
 
 
 (define inks
