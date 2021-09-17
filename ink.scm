@@ -54,6 +54,22 @@ USAGE
 	(else
 	  (mL->oz (bottle-volume ink)))))
 
+;; Given a bottle, print it's name and its price-per-unit-volume
+;; Defaults to milliliters
+(define (ink-price-printer ink #!optional (output-unit 'mL))
+  (fmt #t
+       (bottle-brand ink)
+       " ("
+       (bottle-volume ink)
+       (bottle-unit ink)
+       ") is $"
+	   (fix 2 (/ (bottle-price ink) (normalize-volume ink output-unit)))
+	   " per "
+       output-unit))
+
+(set-record-printer! bottle
+                     (lambda (bottle out) (ink-price-printer bottle)))
+
 ;; A generic comparator - the user supplies the relation
 (define (compare-per-vol left right rel)
   (rel (/ (bottle-price left) (normalize-volume left 'mL))
@@ -72,29 +88,17 @@ USAGE
 (define (price-per ink #!optional (output-unit 'mL))
   (/ (bottle-price ink) (normalize-volume ink output-unit)))
 
-;; Given a bottle, print it's name and its price-per-unit-volume
-;; Defaults to milliliters
-(define (ink-price-printer ink #!optional (output-unit 'mL))
-  (fmt #t
-       (bottle-brand ink)
-       " ("
-       (bottle-volume ink)
-       (bottle-unit ink)
-       ") is $"
-	   (fix 2 (/ (bottle-price ink) (normalize-volume ink output-unit)))
-	   " per "
-       output-unit
-       nl))
-
 
 ;; Now that we have the utilities out of the way, let's run some data through it
-(define (sort-inks inks #!key (unit 'mL) (sorted-by most-expensive-per-vol))
-  (for-each (lambda (ink) (ink-price-printer ink unit))
-            (sort inks sorted-by)))
+(define (sorted-inks inks #!key (sorted-by most-expensive-per-vol))
+  (sort inks sorted-by))
+
+(define (print-sorted-inks inks #!key (sorted-by most-expensive-per-vol))
+  (for-each print (sorted-inks inks sorted-by)))
+
 
 (define inks
   (list
-
     (make-bottle
       "De Atramentis Johann Sebastian Bach"
       45 'mL
@@ -365,5 +369,3 @@ USAGE
       60 'mL
       30)
     ))
-
-
